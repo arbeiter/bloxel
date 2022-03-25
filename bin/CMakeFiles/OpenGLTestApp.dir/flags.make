@@ -5,13 +5,13 @@
 # compile CXX with /usr/bin/c++
 C_DEFINES = 
 
-C_INCLUDES = -I/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin -I/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl -I/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/include -I/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/third_party/glm -I/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/third_party/stb_image
+C_INCLUDES = -I/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin -I/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel -I/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/include -I/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/third_party/glm -I/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/third_party/stb_image
 
 C_FLAGS = 
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin -I/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl -I/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/include -I/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/third_party/glm -I/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/third_party/stb_image
+CXX_INCLUDES = -I/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin -I/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel -I/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/include -I/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/third_party/glm -I/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/third_party/stb_image
 
 CXX_FLAGS = -std=gnu++17
 

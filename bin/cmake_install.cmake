@@ -1,4 +1,4 @@
-# Install script for directory: /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl
+# Install script for directory: /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin/third_party/cmake_install.cmake")
+  include("/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/third_party/cmake_install.cmake")
 
 endif()
 
@@ -56,5 +56,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

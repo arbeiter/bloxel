@@ -1,4 +1,4 @@
-# Install script for directory: /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/third_party
+# Install script for directory: /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/third_party
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

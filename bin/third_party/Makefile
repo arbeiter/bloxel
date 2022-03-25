@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl
+CMAKE_SOURCE_DIR = /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin
+CMAKE_BINARY_DIR = /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,14 +87,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin && $(CMAKE_COMMAND) -E cmake_progress_start /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin/CMakeFiles /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin/third_party//CMakeFiles/progress.marks
-	cd /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 third_party/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin/CMakeFiles 0
+	cd /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin && $(CMAKE_COMMAND) -E cmake_progress_start /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/CMakeFiles /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/third_party//CMakeFiles/progress.marks
+	cd /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 third_party/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 third_party/clean
+	cd /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 third_party/clean
 .PHONY : clean
 
 # The main clean target
@@ -103,17 +103,17 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 third_party/preinstall
+	cd /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 third_party/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 third_party/preinstall
+	cd /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 third_party/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Help Target
@@ -135,6 +135,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

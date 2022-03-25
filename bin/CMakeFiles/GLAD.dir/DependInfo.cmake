@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/include/glad/glad.c" "CMakeFiles/GLAD.dir/include/glad/glad.c.o" "gcc" "CMakeFiles/GLAD.dir/include/glad/glad.c.o.d"
+  "/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/include/glad/glad.c" "CMakeFiles/GLAD.dir/include/glad/glad.c.o" "gcc" "CMakeFiles/GLAD.dir/include/glad/glad.c.o.d"
   )
 
 # Targets to which this target links.

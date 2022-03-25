@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl
+CMAKE_SOURCE_DIR = /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin
+CMAKE_BINARY_DIR = /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -100,14 +100,14 @@ third_party/clean:
 CMakeFiles/GLAD.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/GLAD.dir/build.make CMakeFiles/GLAD.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/GLAD.dir/build.make CMakeFiles/GLAD.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin/CMakeFiles --progress-num=1,2 "Built target GLAD"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/CMakeFiles --progress-num=1,2 "Built target GLAD"
 .PHONY : CMakeFiles/GLAD.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/GLAD.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/GLAD.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/CMakeFiles 0
 .PHONY : CMakeFiles/GLAD.dir/rule
 
 # Convenience name for target.
@@ -126,14 +126,14 @@ CMakeFiles/GLAD.dir/clean:
 CMakeFiles/OpenGLTestApp.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/OpenGLTestApp.dir/build.make CMakeFiles/OpenGLTestApp.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/OpenGLTestApp.dir/build.make CMakeFiles/OpenGLTestApp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin/CMakeFiles --progress-num=3,4,5 "Built target OpenGLTestApp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/CMakeFiles --progress-num=3,4,5 "Built target OpenGLTestApp"
 .PHONY : CMakeFiles/OpenGLTestApp.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/OpenGLTestApp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/OpenGLTestApp.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/CMakeFiles 0
 .PHONY : CMakeFiles/OpenGLTestApp.dir/rule
 
 # Convenience name for target.

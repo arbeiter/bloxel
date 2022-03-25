@@ -4,7 +4,7 @@
 # compile C with /usr/bin/cc
 C_DEFINES = 
 
-C_INCLUDES = -I/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/bin -I/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl -I/home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/include
+C_INCLUDES = -I/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin -I/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel -I/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/include
 
 C_FLAGS = 
 

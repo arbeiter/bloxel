@@ -1,5 +1,5 @@
 CMakeFiles/GLAD.dir/include/glad/glad.c.o: \
- /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/include/glad/glad.c \
+ /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/include/glad/glad.c \
  /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/libc-header-start.h /usr/include/features.h \
  /usr/include/features-time64.h /usr/include/bits/wordsize.h \
@@ -33,8 +33,8 @@ CMakeFiles/GLAD.dir/include/glad/glad.c.o: \
  /usr/include/bits/stdlib-float.h /usr/include/string.h \
  /usr/include/bits/types/locale_t.h /usr/include/bits/types/__locale_t.h \
  /usr/include/strings.h \
- /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/include/glad/glad.h \
- /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/include/KHR/khrplatform.h \
+ /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/include/glad/glad.h \
+ /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/include/KHR/khrplatform.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.2.0/include/stdint.h \
  /usr/include/stdint.h /usr/include/bits/wchar.h \
  /usr/include/bits/stdint-uintn.h /usr/include/dlfcn.h \

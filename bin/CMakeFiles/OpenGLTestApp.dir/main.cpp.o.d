@@ -1,8 +1,8 @@
 CMakeFiles/OpenGLTestApp.dir/main.cpp.o: \
- /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/main.cpp \
+ /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/main.cpp \
  /usr/include/stdc-predef.h \
- /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/include/glad/glad.h \
- /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/include/KHR/khrplatform.h \
+ /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/include/glad/glad.h \
+ /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/include/KHR/khrplatform.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.2.0/include/stdint.h \
  /usr/include/stdint.h /usr/include/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -138,8 +138,8 @@ CMakeFiles/OpenGLTestApp.dir/main.cpp.o: \
  /usr/include/c++/11.2.0/bits/stl_numeric.h /usr/include/c++/11.2.0/bit \
  /usr/include/c++/11.2.0/pstl/glue_numeric_defs.h \
  /usr/include/c++/11.2.0/pstl/execution_defs.h /usr/include/GLFW/glfw3.h \
- /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/shader.h \
- /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/third_party/stb_image/stb_image.h \
+ /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/shader.h \
+ /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/third_party/stb_image/stb_image.h \
  /usr/include/c++/11.2.0/stdlib.h /usr/include/glm/glm.hpp \
  /usr/include/glm/detail/_fixes.hpp /usr/include/glm/detail/setup.hpp \
  /usr/include/c++/11.2.0/cassert /usr/include/assert.h \
@@ -310,7 +310,7 @@ CMakeFiles/OpenGLTestApp.dir/main.cpp.o: \
  /usr/include/glm/ext/matrix_transform.hpp \
  /usr/include/glm/ext/matrix_transform.inl \
  /usr/include/glm/gtc/matrix_transform.inl \
- /home/pulo/code/graphics/OpenGL/mesh_experiments_opengl/camera.hpp \
+ /home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/camera.hpp \
  /usr/include/glm/gtc/type_ptr.hpp /usr/include/glm/gtc/quaternion.hpp \
  /usr/include/glm/ext/vector_relational.hpp \
  /usr/include/glm/ext/vector_relational.inl \
