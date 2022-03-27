@@ -26,10 +26,172 @@ float deltaTime = 0.0f;  // time between current frame and last frame
 float lastFrame = 0.0f;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, -10.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
+
+void renderTriangle() {
+  /* 
+    - Triangle strip experiments
+      - Color triangle strip single color
+      - Color co-ordinates
+      - Texture co-ordinates
+      - Blend textures on two levels
+  */
+  /*
+    std::vector<float> vertices;
+    int height = 1000;
+    int width = 1000;
+    int NUM_VERTS_PER_STRIP = width * 2;
+
+    int height_y = 0;
+    int tileWidth = 1;
+    for(int i = 0; i < height; i++) {
+      for(int j = 0; j < width; j++) {
+        // generate random
+        // screenX = ( i * tileWidth / 2) + (j * tileWidth/2)
+        // screenZ = ( i * tileWidth / 2) - (j * tileWidth/2)
+        float x =  ( i * tileWidth / 2) + (j * tileWidth/2);
+        float y = height_y;
+        float z = ( i * tileWidth / 2) - (j * tileWidth/2);
+        vertices.push_back(x);
+        vertices.push_back(y);
+        vertices.push_back(z);
+      }
+    }
+
+    int rez = 1;
+    std::vector<unsigned> indices;
+    for(unsigned i = 0; i < height - 1; i += rez) {
+      for(unsigned j = 0; j < width; j += rez) {
+        for(unsigned k = 0; k < 2; k++)
+        {
+          indices.push_back(j + width * (i + k*rez));
+        }
+      }
+    }
+
+    GLuint terrainVBO, terrainVAO, terrainEBO;
+    glGenVertexArrays(1, &terrainVAO);
+    glBindVertexArray(terrainVAO);
+
+    glGenBuffers(1, &terrainVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, terrainVBO);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glGenBuffers(1, &terrainEBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, terrainEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int),
+                 &indices[0], GL_STATIC_DRAW);
+    */
+}
+
+void terrainDrawLoop(GLuint terrainVAO, int height) {
+        /*
+        // build and compile our shader program
+        // ------------------------------------
+        Shader ourShader("../shader.vert", "../shader.frag"); // you can name your shader files however you like
+        ourShader.use(); // don't forget to activate/use the shader before setting uniforms!
+        unsigned int sandTexture = loadTexture("../resources/textures/sand.png");
+        unsigned int rockTexture = loadTexture("../resources/textures/wall.jpg");
+        ourShader.setInt("texture1", 0);
+        ourShader.setInt("texture2", 1);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBindVertexArray(terrainVAO);
+        for(int i = 0; i < height-1; i++) {
+          glDrawElements(GL_TRIANGLE_STRIP,
+                         NUM_VERTS_PER_STRIP,
+                         GL_UNSIGNED_INT,
+                         (void *)(sizeof(unsigned int) * NUM_VERTS_PER_STRIP * i)
+                         );
+        }
+
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        // -------------------------------------------------------------------------------
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, sandTexture);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, rockTexture);
+        */
+}
+
+unsigned int renderCube()
+{
+    // set up vertex data (and buffer(s)) and configure vertex attributes
+    // ------------------------------------------------------------------
+    float vertices[] = {
+        // positions          // normals           // texture coords
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
+    };
+
+    glm::vec3 cubePositions[] = {
+      glm::vec3( 0.0f,  0.0f,  0.0f),
+    };
+
+    // first, configure the cube's VAO (and VBO)
+    unsigned int VBO, cubeVAO;
+    glGenVertexArrays(1, &cubeVAO);
+    glGenBuffers(1, &VBO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindVertexArray(cubeVAO);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    return cubeVAO;
+}
 
 int main()
 {
@@ -70,87 +232,17 @@ int main()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
+
     // build and compile our shader program
     // ------------------------------------
     Shader ourShader("../shader.vert", "../shader.frag"); // you can name your shader files however you like
     ourShader.use(); // don't forget to activate/use the shader before setting uniforms!
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    std::vector<float> vertices;
-    float yScale = 64.0f / 256.0f;
-    float yShift = 16.0f;
-    int height = 10;
-    int width = 10;
-    int NUM_VERTS_PER_STRIP = width * 2;
-    int NUM_STRIPS = height - 1;
-
-    std::random_device dev;
-    std::mt19937 rng(dev());
-
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_real_distribution<float> dist(1, 25);
-
-    /* 
-      - Triangle strip experiments
-        - Color triangle strip single color
-        - Color co-ordinates
-        - Texture co-ordinates
-        - Blend textures on two levels
-    */
-
-    int height_y = 0;
-    for(int i = 0; i < height; i++) {
-      for(int j = 0; j < width; j++) {
-        // generate random
-        float random = dist(mt);
-        float x =  i;
-        float y = height_y;
-        height_y += 1;
-        float z = j;
-        vertices.push_back(x);
-        vertices.push_back(y);
-        vertices.push_back(z);
-      }
-    }
-
-    int rez = 1;
-    std::vector<unsigned> indices;
-    for(unsigned i = 0; i < height - 1; i += rez) {
-      for(unsigned j = 0; j < width; j += rez) {
-        for(unsigned k = 0; k < 2; k++)
-        {
-          indices.push_back(j + width * (i + k*rez));
-        }
-      }
-    }
-
-    GLuint terrainVBO, terrainVAO, terrainEBO;
-    glGenVertexArrays(1, &terrainVAO);
-    glBindVertexArray(terrainVAO);
-
-    glGenBuffers(1, &terrainVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, terrainVBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glGenBuffers(1, &terrainEBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, terrainEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int),
-                 &indices[0], GL_STATIC_DRAW);
-    
-    unsigned int sandTexture = loadTexture("../resources/textures/sand.png");
-    unsigned int rockTexture = loadTexture("../resources/textures/rock.png");
-    ourShader.setInt("texture1", 0);
-    ourShader.setInt("texture2", 1);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+    unsigned int cubeVAO = renderCube(); 
+    unsigned int sandTexture = loadTexture("../resources/textures/wall.jpg");
     // render loop
     // -----------
+    float asd = 10;
     while (!glfwWindowShouldClose(window))
     {
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -168,41 +260,28 @@ int main()
 
         // render the triangle
         ourShader.use();
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, sandTexture);
 
         // create transformations
         glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-
         glm::mat4 view = camera.GetViewMatrix();
-        ourShader.setMat4("view", view);
         glm::mat4 projection    = glm::mat4(1.0f);
 
-        model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-        projection = glm::perspective(glm::radians(camera.Zoom), (float)*screen_width/ (float)*screen_height, 0.1f, 100.0f);
+        // isometric projection
+        float half_height = (float)*screen_height / 2.f;
+        float aspect = (float)(800)/ (600);
+        float half_width = (float)*screen_width /2.f;
+        projection = glm::ortho(-half_width, half_width, -half_height, half_height, -1000.0f, 1000.0f);
+        
+        model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.3f, 0.3f));
+        model = glm::scale(model, glm::vec3(500.0f));
+        glBindVertexArray(cubeVAO);
 
-        // retrieve the matrix uniform locations
-        unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
-        unsigned int viewLoc  = glGetUniformLocation(ourShader.ID, "view");
-
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
         ourShader.setMat4("projection", projection);
-        glBindVertexArray(terrainVAO);
-        glDrawElements(GL_TRIANGLE_STRIP,
-                       NUM_VERTS_PER_STRIP,
-                       GL_UNSIGNED_INT,
-                       (void *)(sizeof(unsigned int) * NUM_VERTS_PER_STRIP * 0)
-                       );
-        glDrawElements(GL_TRIANGLE_STRIP,
-                       NUM_VERTS_PER_STRIP,
-                       GL_UNSIGNED_INT,
-                       (void *)(sizeof(unsigned int) * NUM_VERTS_PER_STRIP * 1)
-                       );
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, sandTexture);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, rockTexture);
+        ourShader.setMat4("model", model);
+        ourShader.setMat4("view", view);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -210,9 +289,11 @@ int main()
 
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
+    /*
     glDeleteVertexArrays(1, &terrainVAO);
     glDeleteBuffers(1, &terrainVBO);
     glDeleteBuffers(1, &terrainEBO);
+    */
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
