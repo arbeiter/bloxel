@@ -16,7 +16,7 @@ void processInput(GLFWwindow *window);
 unsigned int loadTexture(const char *path);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-
+void sampleFromSpritesheet(int pos, float &top_left_x, float &top_left_y);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -121,53 +121,103 @@ void terrainDrawLoop(GLuint terrainVAO, int height) {
         */
 }
 
+void sampleFromSpritesheet(int pos, float &top_left_x, float &top_left_y) {
+  float sheet_w, sheet_h;
+  int num_characters_per_row;
+  float character_w, character_h;
+  character_w = 0.142f;
+  character_h = 0.142f;
+  std::cout << (float)(1/7) << std::endl;
+  sheet_w = 1;
+  sheet_h = 1;
+  // 896 is map total width, projected over 1
+  // 896 is map total height, projected over 1
+  // 128 is character total width, projected over 1
+  // 128 is character total height, projected over 1
+
+  num_characters_per_row = 7;
+  std::cout << num_characters_per_row << std::endl;
+  int character_row = (int)(pos / num_characters_per_row);
+  int character_column = pos % num_characters_per_row;
+  std::cout << character_row << " " << character_column << std::endl;
+  std::cout << character_w << " " << character_h << std::endl;
+
+  float pos_y = (float)(character_row * character_h);
+  float pos_x = (float)(character_column * character_w);
+
+  top_left_x =  pos_x;
+  top_left_y = pos_y;
+  std::cout << pos_x << " " << pos_y << std::endl;
+}
+
+
 unsigned int renderCube()
 {
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
+    float wrap = 0.142f;
+    float wrap_2 = 0.142f; 
+    float wrap_3 = 0.142f;
+
+    float top_left_x, top_left_y;
+    sampleFromSpritesheet(10, top_left_x, top_left_y);
+    float top_right_x = top_left_x + wrap;
+    float top_right_y = top_left_y;
+    float bottom_left_x = top_left_x;
+    float bottom_left_y = top_left_y + wrap;
+    float bottom_right_x = top_left_x + wrap;
+    float bottom_right_y = top_left_y + wrap;
+
+    // top_right -> (pos_x + character_w, pos_y)
+    // bottom_left -> (pos_x, pos_y + character_h)
+    // bottom_right -> (pos_x + character_w, pos_y + character_h)
+    std::cout << top_left_x << top_left_y << std::endl;
+
     float vertices[] = {
         // positions          // normals           // texture coords
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  top_left_x,  top_left_y,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  top_right_x,  top_right_y,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  bottom_left_x,  bottom_left_y,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  bottom_left_x,  bottom_left_y,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  top_right_x,  top_right_y,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  bottom_right_x,  bottom_right_y
 
+        /*
         -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  wrap_2, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  wrap_2, wrap_2,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  wrap_2, wrap_2,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  wrap_2,
         -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
 
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  wrap_3,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  wrap_3,  wrap_3,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  wrap_3,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  wrap_3,
         -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  wrap_3,  0.0f,
 
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  wrap_3,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  wrap_3,  wrap_3,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  wrap_3,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  wrap_3,
          0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  wrap_3,  0.0f,
 
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  wrap_3,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  wrap_3, wrap_3,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  wrap_3,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  wrap_3,  0.0f,
         -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  wrap_3,
 
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  wrap_2,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  wrap_2,  wrap_2,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  wrap_2,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  wrap_2,  0.0f,
         -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  wrap_2
+        */
     };
 
     glm::vec3 cubePositions[] = {
@@ -239,7 +289,7 @@ int main()
     ourShader.use(); // don't forget to activate/use the shader before setting uniforms!
 
     unsigned int cubeVAO = renderCube(); 
-    unsigned int sandTexture = loadTexture("../resources/textures/wall.jpg");
+    unsigned int sandTexture = loadTexture("../resources/textures/texture_map_all.jpg");
     // render loop
     // -----------
     float asd = 10;
