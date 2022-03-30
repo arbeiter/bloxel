@@ -1,6 +1,0 @@
-/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/CMakeFiles/GLAD.dir
-/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/CMakeFiles/OpenGLTestApp.dir
-/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/CMakeFiles/edit_cache.dir
-/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/CMakeFiles/rebuild_cache.dir
-/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/third_party/CMakeFiles/edit_cache.dir
-/home/pulo/code/graphics/OpenGL/minecraft/bloxel/bloxel/bin/third_party/CMakeFiles/rebuild_cache.dir

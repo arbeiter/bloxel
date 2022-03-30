@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/OpenGLTestApp.dir/main.cpp.o CMakeFiles/OpenGLTestApp.dir/include/glad/glad.c.o -o OpenGLTestApp  /usr/lib/libglfw.so.3.3 -ldl 

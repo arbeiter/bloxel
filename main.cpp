@@ -1,14 +1,14 @@
 #include <glad/glad.h>
 #include <random>
 #include <GLFW/glfw3.h>
-#include <shader.h>
+#include <src/shader.h>
+#include <src/camera.hpp>
 #include <iostream>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <ostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <camera.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
