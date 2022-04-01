@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <src/shader.h>
 #include <src/camera.hpp>
+#include <src/cube.h>
 #include <iostream>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -327,6 +328,14 @@ int main()
         model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.3f, 0.3f));
         model = glm::scale(model, glm::vec3(500.0f));
         glBindVertexArray(cubeVAO);
+
+        /*
+        Chunk chunk;
+        chunk.voxels.fill(1);
+        auto mesh = createChunkMesh(chunk);
+        renderCube(mesh);
+        glDrawElements(GL_TRIANGLES, chunkRender.indicesCount(), GL_UNSIGNED_INT, 0);
+        */
 
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("model", model);
