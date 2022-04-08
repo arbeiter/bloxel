@@ -32,96 +32,7 @@ float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
-void renderTriangle() {
-  /* 
-    - Triangle strip experiments
-      - Color triangle strip single color
-      - Color co-ordinates
-      - Texture co-ordinates
-      - Blend textures on two levels
-  */
-  /*
-    std::vector<float> vertices;
-    int height = 1000;
-    int width = 1000;
-    int NUM_VERTS_PER_STRIP = width * 2;
-
-    int height_y = 0;
-    int tileWidth = 1;
-    for(int i = 0; i < height; i++) {
-      for(int j = 0; j < width; j++) {
-        // generate random
-        // screenX = ( i * tileWidth / 2) + (j * tileWidth/2)
-        // screenZ = ( i * tileWidth / 2) - (j * tileWidth/2)
-        float x =  ( i * tileWidth / 2) + (j * tileWidth/2);
-        float y = height_y;
-        float z = ( i * tileWidth / 2) - (j * tileWidth/2);
-        vertices.push_back(x);
-        vertices.push_back(y);
-        vertices.push_back(z);
-      }
-    }
-
-    int rez = 1;
-    std::vector<unsigned> indices;
-    for(unsigned i = 0; i < height - 1; i += rez) {
-      for(unsigned j = 0; j < width; j += rez) {
-        for(unsigned k = 0; k < 2; k++)
-        {
-          indices.push_back(j + width * (i + k*rez));
-        }
-      }
-    }
-
-    GLuint terrainVBO, terrainVAO, terrainEBO;
-    glGenVertexArrays(1, &terrainVAO);
-    glBindVertexArray(terrainVAO);
-
-    glGenBuffers(1, &terrainVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, terrainVBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glGenBuffers(1, &terrainEBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, terrainEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int),
-                 &indices[0], GL_STATIC_DRAW);
-    */
-}
-
-void terrainDrawLoop(GLuint terrainVAO, int height) {
-        /*
-        // build and compile our shader program
-        // ------------------------------------
-        Shader ourShader("../shader.vert", "../shader.frag"); // you can name your shader files however you like
-        ourShader.use(); // don't forget to activate/use the shader before setting uniforms!
-        unsigned int sandTexture = loadTexture("../resources/textures/sand.png");
-        unsigned int rockTexture = loadTexture("../resources/textures/wall.jpg");
-        ourShader.setInt("texture1", 0);
-        ourShader.setInt("texture2", 1);
-
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glBindVertexArray(terrainVAO);
-        for(int i = 0; i < height-1; i++) {
-          glDrawElements(GL_TRIANGLE_STRIP,
-                         NUM_VERTS_PER_STRIP,
-                         GL_UNSIGNED_INT,
-                         (void *)(sizeof(unsigned int) * NUM_VERTS_PER_STRIP * i)
-                         );
-        }
-
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, sandTexture);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, rockTexture);
-        */
-}
-
+// TODO: Move to texture
 void sampleFromSpritesheet(int pos, float &top_left_x, float &top_left_y) {
   float sheet_w, sheet_h;
   int num_characters_per_row;
@@ -151,97 +62,54 @@ void sampleFromSpritesheet(int pos, float &top_left_x, float &top_left_y) {
   std::cout << pos_x << " " << pos_y << std::endl;
 }
 
-
-unsigned int renderCube()
+static void GLAPIENTRY glDebugCallback(GLenum source, GLenum type, GLuint, GLenum severity, GLsizei,
+                                       const GLchar* message, const void*)
 {
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
-    float wrap = 0.142f;
-    float wrap_2 = 0.142f; 
-    float wrap_3 = 0.142f;
+    std::cout << "DEBUG" << std::endl;
+    // clang-format off
+    const char* severityString = "?";
+    switch (severity) {
+        case GL_DEBUG_SEVERITY_HIGH:            severityString = "high";    break;
+        case GL_DEBUG_SEVERITY_MEDIUM:          severityString = "medium";  break;
+        case GL_DEBUG_SEVERITY_LOW:             severityString = "low";     break;
+        case GL_DEBUG_SEVERITY_NOTIFICATION:                                return;
+    }
 
-    float top_left_x, top_left_y;
-    sampleFromSpritesheet(10, top_left_x, top_left_y);
-    float top_right_x = top_left_x + wrap;
-    float top_right_y = top_left_y;
-    float bottom_left_x = top_left_x;
-    float bottom_left_y = top_left_y + wrap;
-    float bottom_right_x = top_left_x + wrap;
-    float bottom_right_y = top_left_y + wrap;
+    const char* sourceString = "?";
+    switch (source) {
+        case GL_DEBUG_SOURCE_API:               sourceString = "API";               break;
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:     sourceString = "window system";     break;
+        case GL_DEBUG_SOURCE_SHADER_COMPILER:   sourceString = "shader compiler";   break;
+        case GL_DEBUG_SOURCE_THIRD_PARTY:       sourceString = "third party";       break;
+        case GL_DEBUG_SOURCE_APPLICATION:       sourceString = "app";               break;
+        case GL_DEBUG_SOURCE_OTHER:             sourceString = "other";             break;
+    }
 
-    // top_right -> (pos_x + character_w, pos_y)
-    // bottom_left -> (pos_x, pos_y + character_h)
-    // bottom_right -> (pos_x + character_w, pos_y + character_h)
-    std::cout << top_left_x << top_left_y << std::endl;
+    const char* typeString = "?";
+    switch (type) {
+        case GL_DEBUG_TYPE_ERROR:                   typeString = "error";               break;
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:     typeString = "deprecated behavior"; break;
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:      typeString = "undefined behavior";  break;
+        case GL_DEBUG_TYPE_PORTABILITY:             typeString = "portability";         break;
+        case GL_DEBUG_TYPE_MARKER:                  typeString = "marker";              break;
+        case GL_DEBUG_TYPE_PUSH_GROUP:              typeString = "push group";          break;
+        case GL_DEBUG_TYPE_POP_GROUP:               typeString = "pop group";           break;
+        case GL_DEBUG_TYPE_OTHER:                   typeString = "other";               break;
+    }
+    // clang-format on
 
-    float vertices[] = {
-        // positions          // normals           // texture coords
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  top_left_x,  top_left_y,
-         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  top_right_x,  top_right_y,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  bottom_left_x,  bottom_left_y,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  bottom_left_x,  bottom_left_y,
-        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  top_right_x,  top_right_y,
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  bottom_right_x,  bottom_right_y
+    fprintf(stderr, "OpenGL Message.\n Type: %s\nSeverity: %s\nSource: %s\nMessage: %s\n\n", typeString, severityString,
+            sourceString, message);
 
-        /*
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  wrap_2, 0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  wrap_2, wrap_2,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  wrap_2, wrap_2,
-        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  wrap_2,
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+    if (severity == GL_DEBUG_SEVERITY_HIGH)
+        throw(std::runtime_error("GL Error"));
+}
 
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  wrap_3,  0.0f,
-        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  wrap_3,  wrap_3,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  wrap_3,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  wrap_3,
-        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  wrap_3,  0.0f,
-
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  wrap_3,  0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  wrap_3,  wrap_3,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  wrap_3,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  wrap_3,
-         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  wrap_3,  0.0f,
-
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  wrap_3,
-         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  wrap_3, wrap_3,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  wrap_3,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  wrap_3,  0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  wrap_3,
-
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  wrap_2,
-         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  wrap_2,  wrap_2,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  wrap_2,  0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  wrap_2,  0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  wrap_2
-        */
-    };
-
-    glm::vec3 cubePositions[] = {
-      glm::vec3( 0.0f,  0.0f,  0.0f),
-    };
-
-    // first, configure the cube's VAO (and VBO)
-    unsigned int VBO, cubeVAO;
-    glGenVertexArrays(1, &cubeVAO);
-    glGenBuffers(1, &VBO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindVertexArray(cubeVAO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-    return cubeVAO;
+static void initGLDebug() {
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback(glDebugCallback, NULL);
+    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 }
 
 int main()
@@ -252,6 +120,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -283,17 +152,25 @@ int main()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-
     // build and compile our shader program
     // ------------------------------------
     Shader ourShader("../shader.vert", "../shader.frag"); // you can name your shader files however you like
     ourShader.use(); // don't forget to activate/use the shader before setting uniforms!
+    int flags; glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+    if(flags & GL_CONTEXT_FLAG_DEBUG_BIT ) {
+      std::cout << "INIT DEBUG" << std::endl;
+      initGLDebug();
+    }
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 
-    unsigned int cubeVAO = renderCube(); 
+    Cube cube;
+    unsigned int cubeVAO = cube.renderCube(); 
     unsigned int sandTexture = loadTexture("../resources/textures/texture_map_all.jpg");
+    std::cout << cube.indicesCount() << std::endl;
+
     // render loop
     // -----------
-    float asd = 10;
     while (!glfwWindowShouldClose(window))
     {
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -307,7 +184,7 @@ int main()
         // render
         // ------
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // render the triangle
         ourShader.use();
@@ -323,36 +200,22 @@ int main()
         float half_height = (float)*screen_height / 2.f;
         float aspect = (float)(800)/ (600);
         float half_width = (float)*screen_width /2.f;
-        projection = glm::ortho(-half_width, half_width, -half_height, half_height, -1000.0f, 1000.0f);
-        
+
+        projection = glm::ortho(-half_width, half_width, -half_height, half_height, -10000.0f, 10000.0f);
+        //projection = glm::perspective(glm::radians(45.0f), (float)800/ (float)600, -1000.1f, 1000.0f);
         model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.3f, 0.3f));
-        model = glm::scale(model, glm::vec3(500.0f));
+        model = glm::scale(model, glm::vec3(300.0f));
+
         glBindVertexArray(cubeVAO);
-
-        /*
-        Chunk chunk;
-        chunk.voxels.fill(1);
-        auto mesh = createChunkMesh(chunk);
-        renderCube(mesh);
-        glDrawElements(GL_TRIANGLES, chunkRender.indicesCount(), GL_UNSIGNED_INT, 0);
-        */
-
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("model", model);
         ourShader.setMat4("view", view);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
 
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+        //glDrawArrays(GL_TRIANGLES, 0, 3 * 12);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
-    // optional: de-allocate all resources once they've outlived their purpose:
-    // ------------------------------------------------------------------------
-    /*
-    glDeleteVertexArrays(1, &terrainVAO);
-    glDeleteBuffers(1, &terrainVBO);
-    glDeleteBuffers(1, &terrainEBO);
-    */
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
@@ -386,7 +249,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
-
 
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 {
