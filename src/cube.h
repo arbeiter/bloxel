@@ -30,12 +30,12 @@ class Cube {
   // Mesh createChunkMesh(const Chunk& chunk);
   // void addFace(Mesh& mesh, const VoxelFace& face, glm::vec3 voxelPosition);
   const VoxelFace FRONT_FACE = {glm::vec3{1, 1, 1}, glm::vec3{0, 1, 1}, glm::vec3{0, 0, 1}, glm::vec3{1, 0, 1}};
-  const VoxelFace LEFT_FACE = {glm::vec3{0, 1, 1}, {0, 1, 0}, {0, 0, 0}, {0, 0, 1}};
-  const VoxelFace BACK_FACE = {glm::vec3{0, 1, 0}, {1, 1, 0}, {1, 0, 0}, {0, 0, 0}};
-  const VoxelFace RIGHT_FACE = {glm::vec3{1, 1, 0}, {1, 1, 1}, {1, 0, 1}, {1, 0, 0}};
-  const VoxelFace TOP_FACE = {glm::vec3{1, 1, 0}, {0, 1, 0}, {0, 1, 1}, {1, 1, 1}};
-  const VoxelFace BOTTOM_FACE = {glm::vec3{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}};
-  std::array<glm::vec2, 4> textures = {glm::vec2{0.0f, 1.0f}, {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}};
+  const VoxelFace LEFT_FACE = {glm::vec3{0, 1, 1}, glm::vec3{0, 1, 0}, glm::vec3{0, 0, 0}, glm::vec3{0, 0, 1}};
+  const VoxelFace BACK_FACE = {glm::vec3{0, 1, 0}, glm::vec3{1, 1, 0}, glm::vec3{1, 0, 0}, glm::vec3{0, 0, 0}};
+  const VoxelFace RIGHT_FACE = {glm::vec3{1, 1, 0}, glm::vec3{1, 1, 1}, glm::vec3{1, 0, 1},glm::vec3{1, 0, 0}};
+  const VoxelFace TOP_FACE = {glm::vec3{1, 1, 0}, glm::vec3{0, 1, 0},glm::vec3{0, 1, 1},glm::vec3{1, 1, 1}};
+  const VoxelFace BOTTOM_FACE = {glm::vec3{0, 0, 0}, glm::vec3{1, 0, 0}, glm::vec3{1, 0, 1}, glm::vec3{0, 0, 1}};
+  std::array<glm::vec2, 4> textures = {glm::vec2{0.0f, 1.0f}, glm::vec2{1.0f, 1.0f}, glm::vec2{1.0f, 0.0f}, glm::vec2{0.0f, 0.0f}};
 
   public:
   Cube() {}
@@ -76,14 +76,12 @@ class Cube {
   {
       Mesh mesh;
       glm::vec3 voxelPosition = {0, 0,0};
-      //addFace(mesh, LEFT_FACE, voxelPosition);
-      //addFace(mesh, RIGHT_FACE, voxelPosition);
-      //addFace(mesh, TOP_FACE, voxelPosition);
-      //addFace(mesh, BOTTOM_FACE, voxelPosition);
-      //addFace(mesh, BACK_FACE, voxelPosition);
-      addFace(mesh, FRONT_FACE, voxelPosition);
-      /*
-      for (int y = 0; y < CHUNK_SIZE; y++) {
+      addFace(mesh, LEFT_FACE, voxelPosition);
+      addFace(mesh, RIGHT_FACE, voxelPosition);
+      addFace(mesh, TOP_FACE, voxelPosition);
+      addFace(mesh, BOTTOM_FACE, voxelPosition);
+      addFace(mesh, BACK_FACE, voxelPosition);
+      addFace(mesh, FRONT_FACE, voxelPosition); /* for (int y = 0; y < CHUNK_SIZE; y++) {
           for (int z = 0; z < CHUNK_SIZE; z++) {
               for (int x = 0; x < CHUNK_SIZE; x++) {
                 glm::vec3 voxelPosition = {x, y, z};
@@ -107,6 +105,38 @@ class Cube {
       chunk.voxels.fill(1);
 
       auto mesh = createChunkMesh(chunk);
+      mesh.vertices.clear(); 
+
+      Vertex v;
+      v.position = glm::vec3{1.0f, 1.0f, 1.0f}; 
+      v.texture = glm::vec2{0.0f, 1.0f};
+      mesh.vertices.push_back(v);
+
+      Vertex v1;
+      v1.position = glm::vec3{0.0f, 1.0f, 1.0f}; 
+      v1.texture = glm::vec2{1.0f, 1.0f};
+      mesh.vertices.push_back(v1);
+
+      Vertex v2;
+      v2.position = glm::vec3{0.0f, 0.0f, 1.0f}; 
+      v2.texture = glm::vec2{1.0f, 0.0f};
+      mesh.vertices.push_back(v2);
+
+      Vertex v3;
+      v3.position = glm::vec3{0.0f, 0.0f, 1.0f};
+      v3.texture = glm::vec2{0.0f, 0.0f};
+      mesh.vertices.push_back(v3);
+
+      Vertex v4;
+      v4.position = glm::vec3{1.0f, 0.0f, 1.0f};
+      v4.texture = glm::vec2{0.0f, 0.0f};
+      mesh.vertices.push_back(v4);
+
+      Vertex v5;
+      v5.position = glm::vec3{1.0f, 1.0f, 1.0f};
+      v5.texture = glm::vec2{0.0f, 0.0f};
+      mesh.vertices.push_back(v5);
+
       GLuint VBO = 0;
       GLuint cubeVAO = 0;
       GLuint EBO = 0;
@@ -123,16 +153,16 @@ class Cube {
       glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * mesh.indices.size(), mesh.indices.data(), GL_STATIC_DRAW);
 
       // Experimental
-      glVertexArrayVertexBuffer(cubeVAO, 0, VBO, 0, sizeof(Vertex));
+      //glVertexArrayVertexBuffer(cubeVAO, 0, VBO, 0, sizeof(Vertex));
 
       glEnableVertexAttribArray(0);
       glEnableVertexAttribArray(1);
-      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, mesh.vertices.size() * sizeof(float), (void*)0);
-      glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, mesh.vertices.size() * sizeof(float), (void*)(3 * sizeof(float)));
+      glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+      glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 
       // Experimental
-      glVertexArrayAttribBinding(cubeVAO, 0, 0);
-      glVertexArrayAttribBinding(cubeVAO, 1, 0);
+      //glVertexArrayAttribBinding(cubeVAO, 0, 0);
+      //glVertexArrayAttribBinding(cubeVAO, 1, 0);
       glVertexArrayElementBuffer(cubeVAO, EBO);
 
       printMesh(mesh);

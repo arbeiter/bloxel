@@ -204,15 +204,15 @@ int main()
         projection = glm::ortho(-half_width, half_width, -half_height, half_height, -10000.0f, 10000.0f);
         //projection = glm::perspective(glm::radians(45.0f), (float)800/ (float)600, -1000.1f, 1000.0f);
         model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.3f, 0.3f));
-        model = glm::scale(model, glm::vec3(300.0f));
+        model = glm::scale(model, glm::vec3(100.0f));
 
         glBindVertexArray(cubeVAO);
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("model", model);
         ourShader.setMat4("view", view);
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
-        //glDrawArrays(GL_TRIANGLES, 0, 3 * 12);
+        //glDrawElements(GL_TRIANGLES, 3 * 4, GL_UNSIGNED_INT, NULL);
+        glDrawArrays(GL_TRIANGLES, 0, 3 * 4);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
