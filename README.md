@@ -1,6 +1,4 @@
 ### Minimal 3d Voxel engine
 
-Roadmap:
-  - 3d Meshes
-  - Blocks with different terrain sides
-  - Isometric view for Camera
+WIP: Current mesh render examples:
+![Alt text](ss.png)
