@@ -17,7 +17,7 @@ namespace Bloxel
 {
     #define SCALE_FACTOR 8
     #define SCX 1
-    #define SCY 1
+    #define SCY 5 
     #define SCZ 1
 
     using VoxelFace = std::array<glm::vec3, 4>;
@@ -224,7 +224,6 @@ namespace Bloxel
       bool isRenderable(int x, int y, int z, std::map<Position, int> chunkPosMap) {
         Position absPosition = {x, y, z};
         if(chunkPosMap[absPosition] == 2) {
-          printf("SKIPPED AIR\n");
           return false;
         }
         std::vector<Position> allNeighbors = getNeighbors(absPosition.x, absPosition.y, absPosition.z);
@@ -490,15 +489,7 @@ namespace Bloxel
               }
 
               chunkPosMap[absolutePos] = static_cast<int>(ttype); 
-              //TODO: Remove these comments after done debugging
-              //std::cout << "Voxel before" << voxel_y << " " << static_cast<int>(ttype) << std::endl;
               chunk.setVoxel(relativePos, ttype);
-
-              /*
-              Cube& chunk2 = get(i % SCX, k % SCY, j % SCZ);
-              ttype = chunk2.getVoxel(relativePos);
-              std::cout << "Voxel AFTER " << voxel_y << " " << static_cast<int>(ttype) << std::endl;
-              */
             }
           }
         }
@@ -521,7 +512,6 @@ namespace Bloxel
           for(int j = 0; j < cols; j++) {
             for(int k = 0; k < breadths; k++) {
               Cube cube = get(i, j, k);
-              cube.setChunkPosMap(chunkPosMap);
               cube.addToChunkMesh(worldMesh);
             }
           }
