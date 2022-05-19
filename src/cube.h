@@ -310,7 +310,7 @@ namespace Bloxel
       float width;
       float height;
       int scaleFactor;
-      std::map<Position, int> chunkPosMap {};
+      std::map<Position, int> chunkPosMap; 
       Renderable renderable;
       TextureAtlas textureAtlas;
 
@@ -341,7 +341,6 @@ namespace Bloxel
 
       
       void setVoxel(Position &voxelPosition, texture_type blockType) {
-        std::cout << "Voxel type " << voxelPosition.y << " " << static_cast<int>(blockType) << std::endl;
         blocks[voxelPosition.x][voxelPosition.y][voxelPosition.z] = blockType;
       }
 
@@ -355,7 +354,6 @@ namespace Bloxel
 
       void addFace(Mesh& mesh, const VoxelFace& face, Position voxelPosition, BlockFace blockFace) {
         texture_type ttype = getVoxel(voxelPosition);
-        std::cout << "What is the texture type " << static_cast<int>(ttype) << std::endl;
         TextureArray textures = getTextureArray(ttype, blockFace);
 
         glm::vec3 voxelPos = glm::vec3(voxelPosition.x, voxelPosition.y, voxelPosition.z);
@@ -485,7 +483,7 @@ namespace Bloxel
               int voxel_y = (int)(k / SCY);
               int voxel_z = (int)(j / SCZ);
               Position relativePos = { voxel_x, voxel_y, voxel_z };
-              Position absolutePos = { i % SCX + voxel_x, k % SCY + voxel_y, j % SCZ + voxel_z };
+              Position absolutePos = { i, k, j };
               texture_type ttype = getTextureFromHeight(k);
               if(k > max_height) {
                 ttype = texture_type::air;
@@ -523,6 +521,7 @@ namespace Bloxel
           for(int j = 0; j < cols; j++) {
             for(int k = 0; k < breadths; k++) {
               Cube cube = get(i, j, k);
+              cube.setChunkPosMap(chunkPosMap);
               cube.addToChunkMesh(worldMesh);
             }
           }
