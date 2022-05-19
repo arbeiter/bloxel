@@ -485,7 +485,7 @@ namespace Bloxel
               int voxel_y = (int)(k / SCY);
               int voxel_z = (int)(j / SCZ);
               Position relativePos = { voxel_x, voxel_y, voxel_z };
-              Position absolutePos = { i, k, j };
+              Position absolutePos = { i % SCX + voxel_x, k % SCY + voxel_y, j % SCZ + voxel_z };
               texture_type ttype = getTextureFromHeight(k);
               if(k > max_height) {
                 ttype = texture_type::air;
