@@ -15,6 +15,7 @@
 
 namespace Bloxel 
 {
+    #define SCALE_FACTOR 8
     #define SCX 1
     #define SCY 1
     #define SCZ 1
@@ -57,9 +58,9 @@ namespace Bloxel
       front= 0, back = 1, left = 2, right = 3, top = 4, bottom = 5
     };
 
-    constexpr int CX = 15;
-    constexpr int CY = 64;
-    constexpr int CZ = 15;
+    constexpr int CX = 1;
+    constexpr int CY = 16;
+    constexpr int CZ = 1;
     struct Vertex {
         glm::vec3 position{0.0f};
         glm::vec2 texture{0.0f};
@@ -80,9 +81,9 @@ namespace Bloxel
       void render(Shader& ourShader, glm::mat4 view, float screen_w, float screen_h) {
           glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
           model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 0.3f, 0.3f));
-          model = glm::scale(model, glm::vec3((float)40));
+          model = glm::scale(model, glm::vec3((float)20));
 
-          glm::mat4 projection    = glm::mat4(1.0f);
+          glm::mat4 projection = glm::mat4(1.0f);
           screen_w = screen_w/2.0f;
           screen_h = screen_h/2.0f;
 
@@ -91,8 +92,11 @@ namespace Bloxel
           ourShader.setMat4("model", model);
           ourShader.setMat4("view", view);
 
+          //std::cout << "Before draw elements " << std::endl;
           glBindVertexArray(cubeVAO);
           glDrawElements(GL_TRIANGLES, 5 * indicesCount(), GL_UNSIGNED_INT, 0);
+          //float currentFrame = static_cast<float>(glfwGetTime());
+          //std::cout << "After draw elements " << currentFrame << " " << std::endl;
       }
 
       void setIndexCount(int count) {
@@ -109,6 +113,8 @@ namespace Bloxel
 
       unsigned int generateCubeVAO()
       {
+          vertexCount = vertices.size();
+          std::cout << "Buffer data started " << vertexCount << " " << std::endl;
           glGenVertexArrays(1, &cubeVAO);
           glBindVertexArray(cubeVAO);
 
@@ -124,6 +130,7 @@ namespace Bloxel
           glEnableVertexAttribArray(0);
           glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
           glEnableVertexAttribArray(1);
+          std::cout << "Buffer data done" << std::endl;
 
           vertexCount = vertices.size();
           return cubeVAO;
@@ -217,7 +224,7 @@ namespace Bloxel
       bool isRenderable(int x, int y, int z, std::map<Position, int> chunkPosMap) {
         Position absPosition = {x, y, z};
         if(chunkPosMap[absPosition] == 2) {
-          //printf("SKIPPED AIR\n");
+          printf("SKIPPED AIR\n");
           return false;
         }
         std::vector<Position> allNeighbors = getNeighbors(absPosition.x, absPosition.y, absPosition.z);
@@ -283,8 +290,6 @@ namespace Bloxel
       }
 
       Position computeAbsolutePosition(int x, int y, int z) {
-        // x = 1
-        // SCX = 0 1 2
         int absX =  startX * SCX + x;
         int absY = startY * SCY + y;
         int absZ = startZ * SCZ + z;
@@ -310,16 +315,17 @@ namespace Bloxel
       TextureAtlas textureAtlas;
 
       public:
+      int temp;
       Cube(Position pos, float width, float height, int scaleFactor) :renderable { Renderable(pos) }, textureAtlas { TextureAtlas() }
       {
         startX = pos.x;
+        temp = 0;
         startY = pos.y;
         startZ = pos.z;
-        blockType = texture_type::grass;
         memset(blocks, 0, sizeof(blocks));
       }
 
-      TextureArray getTexture(texture_type ttype, BlockFace blockFace) {
+      TextureArray getTextureArray(texture_type ttype, BlockFace blockFace) {
         int row = textureAtlas.getRow(ttype);
         int column = textureAtlas.getColumn(blockFace);
         //std::cout << "Get Texture " << row << " " << column << " " << static_cast<int>(ttype) << std::endl;
@@ -335,7 +341,12 @@ namespace Bloxel
 
       
       void setVoxel(Position &voxelPosition, texture_type blockType) {
+        std::cout << "Voxel type " << voxelPosition.y << " " << static_cast<int>(blockType) << std::endl;
         blocks[voxelPosition.x][voxelPosition.y][voxelPosition.z] = blockType;
+      }
+
+      void printTexture() {
+        std::cout << static_cast<int>(blockType) << std::endl;
       }
 
       texture_type getVoxel(Position &voxelPosition) {
@@ -344,7 +355,8 @@ namespace Bloxel
 
       void addFace(Mesh& mesh, const VoxelFace& face, Position voxelPosition, BlockFace blockFace) {
         texture_type ttype = getVoxel(voxelPosition);
-        TextureArray textures = getTexture(ttype, blockFace);
+        std::cout << "What is the texture type " << static_cast<int>(ttype) << std::endl;
+        TextureArray textures = getTextureArray(ttype, blockFace);
 
         glm::vec3 voxelPos = glm::vec3(voxelPosition.x, voxelPosition.y, voxelPosition.z);
         for(int i = 0; i < 4; i++) {
@@ -377,8 +389,6 @@ namespace Bloxel
         chunkPosMap = posMap;
       }
 
-      // Important TODO: Move this to super chunk, this is not optimal
-      // Roadmap: leaving this here for when we add SSBOs
       void addToChunkMesh(Mesh &mesh) {
           int endY = startY + CY;
           int endX = startX + CX;
@@ -404,7 +414,7 @@ namespace Bloxel
       }
     };
 
-    typedef std::vector<Cube *> v1d;
+    typedef std::vector<Cube> v1d;
     typedef std::vector<v1d> v2d;
     typedef std::vector<v2d> v3d;
 
@@ -427,18 +437,18 @@ namespace Bloxel
         sFactor = scaleFactor;
 
         Position pos = { 0, 0, 0};
-        world = v3d(rows, v2d(cols, v1d(breadths, new Cube(pos, w, h, sFactor))));
+        world = v3d(rows, v2d(cols, v1d(breadths, Cube(pos, w, h, sFactor))));
         for(int i = 0; i < rows; i++) {
           for(int j = 0; j < cols; j++) {
             for(int k = 0; k < breadths; k++) {
               Position pos = {i, j, k};
-              world[i][j][k] = new Cube(pos, w, h, sFactor);
+              world[i][j][k] = Cube(pos, w, h, sFactor);
             }
           }
         }
       }
 
-      Cube* get(int x, int y, int z) {
+      Cube& get(int x, int y, int z) {
         return world[x][y][z];
       }
 
@@ -447,7 +457,7 @@ namespace Bloxel
         for(int i = 0; i < rows; i++) {
           for(int j = 0; j < cols; j++) {
             Position pos = {i*CX, j*CY, breadths*CZ};
-            world[i][j].push_back(new Cube(pos, w, h, sFactor));
+            world[i][j].push_back(Cube(pos, w, h, sFactor));
           }
         }
       }
@@ -455,11 +465,9 @@ namespace Bloxel
       texture_type getTextureFromHeight(int h) {
         //std::cout << "Get Texture From Height" << h << std::endl;
         if(h < 20) {
-          std::cout << h << " Texture type stone" << std::endl;
           return texture_type::stone;
         }
         if(h < 60 && h >= 20) {
-          std::cout << h << " Texture type grass" << std::endl;
           return texture_type::grass;
         }
         return texture_type::air;
@@ -470,7 +478,9 @@ namespace Bloxel
           for(int j = 0; j < cols; j++) {
             int max_height = *((height+ i * cols) + j);
             for(int k = 0; k < SCY * CY; k++) {
-              Cube *chunk = get(i % SCX, k % SCY, j % SCZ);
+
+              Cube& chunk = get(i % SCX, k % SCY, j % SCZ);
+
               int voxel_x = (int)(i / SCX);
               int voxel_y = (int)(k / SCY);
               int voxel_z = (int)(j / SCZ);
@@ -480,36 +490,49 @@ namespace Bloxel
               if(k > max_height) {
                 ttype = texture_type::air;
               }
+
               chunkPosMap[absolutePos] = static_cast<int>(ttype); 
-              chunk->setVoxel(relativePos, ttype);
+              //TODO: Remove these comments after done debugging
+              //std::cout << "Voxel before" << voxel_y << " " << static_cast<int>(ttype) << std::endl;
+              chunk.setVoxel(relativePos, ttype);
+
+              /*
+              Cube& chunk2 = get(i % SCX, k % SCY, j % SCZ);
+              ttype = chunk2.getVoxel(relativePos);
+              std::cout << "Voxel AFTER " << voxel_y << " " << static_cast<int>(ttype) << std::endl;
+              */
             }
           }
         }
       }
 
-      void generate_super_mesh() {
+      void generate_world_mesh() {
         worldMesh = Mesh();
         for(int i = 0; i < rows; i++) {
           for(int j = 0; j < cols; j++) {
             for(int k = 0; k < breadths; k++) {
-              Cube* cube = get(i, j, k);
-              cube->setChunkPosMap(chunkPosMap);
+              Cube cube = get(i, j, k);
+              // BUGCHECK: Verify that chunk pos map is actually set
+              cube.setChunkPosMap(chunkPosMap);
             }
           }
         }
 
+        std::cout << "Chunks generated"<< std::endl;
         for(int i = 0; i < rows; i++) {
           for(int j = 0; j < cols; j++) {
             for(int k = 0; k < breadths; k++) {
-              Cube* cube = get(i, j, k);
-              cube->addToChunkMesh(worldMesh);
+              Cube cube = get(i, j, k);
+              cube.addToChunkMesh(worldMesh);
             }
           }
         }
+        std::cout << "Mesh generated"<< std::endl;
+        worldMesh.generateCubeVAO();
       }
 
+
       void renderWorldMesh(Shader& shader, glm::mat4 view, float screen_w, float screen_h) {
-        worldMesh.generateCubeVAO();
         worldMesh.render(shader, view, screen_w, screen_h);
       }
 
@@ -526,15 +549,15 @@ namespace Bloxel
     using namespace bloxel::logger;
 
     class TerrainGen {
-      World sc;
+      World world;
       int heightmap[SCX*CX][SCZ*CZ];
 
       public:
-      TerrainGen(float width, float height, int scaleFactor): sc { World(width, height, scaleFactor) } {
+      TerrainGen(float width, float height, int scaleFactor): world { World(width, height, scaleFactor) } {
       }
 
       World getWorld() {
-        return sc;
+        return world;
       }
 
       void logHeightMapToFile() {
@@ -544,11 +567,11 @@ namespace Bloxel
       }
 
       void generateMeshes() {
-        sc.generate_super_mesh();
+        world.generate_world_mesh();
       }
 
       void render(Shader& shader, glm::mat4 view, float w, float h) {
-        sc.renderWorldMesh(shader, view, w, h);
+        world.renderWorldMesh(shader, view, w, h);
       }
 
       void crudeHeightGen() {
@@ -582,17 +605,17 @@ namespace Bloxel
             float x = -xmax/2.0f + xmax*i/(float)xmax;
             float z = -zmax/2.0f + zmax*j/(float)zmax;
             float y_noise = noise -> GetNoise((float)x, (float)z);
-            int y_clamp = SCY*CY * 6;
+            int y_clamp = SCY * CY * SCALE_FACTOR;
             int y = std::abs((int)(y_noise * y_clamp));
             heightmap[i][j] = std::min(y, SCY*CY);
           }
         }
-        sc.columnar_voxel_population((int *)heightmap, SCX*CX, SCZ*CZ);
+        world.columnar_voxel_population((int *)heightmap, SCX*CX, SCZ*CZ);
         logHeightMapToFile();
       }
 
       void display() {
-        sc.displayChunkMap();
+        world.displayChunkMap();
       }
     };
 }

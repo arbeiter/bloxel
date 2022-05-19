@@ -147,6 +147,7 @@ int main()
 
     Bloxel::TerrainGen t(width, height, 1);
     t.noiseHeightGen();
+    std::cout << "Generating mesh"<< std::endl;
     t.generateMeshes();
     unsigned int blockTexture = loadTexture("../resources/textures/out.png");
 
