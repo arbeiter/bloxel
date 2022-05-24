@@ -15,8 +15,8 @@
 
 namespace Bloxel 
 {
-    #define SCALE_FACTOR 8
-    #define SCX 3
+    #define SCALE_FACTOR 6
+    #define SCX 3 
     #define SCY 3
     #define SCZ 3
 
@@ -58,9 +58,9 @@ namespace Bloxel
       front= 0, back = 1, left = 2, right = 3, top = 4, bottom = 5
     };
 
-    constexpr int CX = 16;
-    constexpr int CY = 16;
-    constexpr int CZ = 16;
+    constexpr int CX = 20;
+    constexpr int CY = 3;
+    constexpr int CZ = 20;
     struct Vertex {
         glm::vec3 position{0.0f};
         glm::vec2 texture{0.0f};
@@ -92,11 +92,9 @@ namespace Bloxel
           ourShader.setMat4("model", model);
           ourShader.setMat4("view", view);
 
-          std::cout << "Before draw elements " << std::endl;
           glBindVertexArray(cubeVAO);
           glDrawElements(GL_TRIANGLES, 5 * indicesCount(), GL_UNSIGNED_INT, 0);
           float currentFrame = static_cast<float>(glfwGetTime());
-          std::cout << "After draw elements " << currentFrame << " " << std::endl;
       }
 
       void setIndexCount(int count) {
@@ -114,7 +112,6 @@ namespace Bloxel
       unsigned int generateCubeVAO()
       {
           vertexCount = vertices.size();
-          std::cout << "Buffer data started " << vertexCount << " " << std::endl;
           glGenVertexArrays(1, &cubeVAO);
           glBindVertexArray(cubeVAO);
 
@@ -130,7 +127,6 @@ namespace Bloxel
           glEnableVertexAttribArray(0);
           glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
           glEnableVertexAttribArray(1);
-          std::cout << "Buffer data done" << std::endl;
 
           vertexCount = vertices.size();
           return cubeVAO;
@@ -159,14 +155,13 @@ namespace Bloxel
       float character_h = (float)(1.0f / 2.0f);
 
       public:
-      TextureAtlas() {}
+      TextureAtlas() { }
 
       int getRow(texture_type ttype) {
         return textureRowMap[ttype];
       }
 
       int getColumn(BlockFace face) {
-        //std::cout << "FACE " << static_cast<int>(face) << std::endl;
         return blockFaceMap[face];
       }
 
@@ -314,12 +309,10 @@ namespace Bloxel
       TextureAtlas textureAtlas;
 
       public:
-      int temp;
       Cube(Position pos, float width, float height, int scaleFactor) :renderable { Renderable(pos) }, textureAtlas { TextureAtlas() }
       {
         chunkPosMap = {};
         startX = pos.x;
-        temp = 0;
         startY = pos.y;
         startZ = pos.z;
         memset(blocks, 0, sizeof(blocks));
@@ -328,9 +321,7 @@ namespace Bloxel
       TextureArray getTextureArray(texture_type ttype, BlockFace blockFace) {
         int row = textureAtlas.getRow(ttype);
         int column = textureAtlas.getColumn(blockFace);
-        //std::cout << "Get Texture " << row << " " << column << " " << static_cast<int>(ttype) << std::endl;
 
-        // 0 1
         struct textureCoords coords = textureAtlas.sampleFromSpritesheet(row, column);
         textures = {glm::vec2{coords.top_left_x, coords.top_left_y}, 
                     glm::vec2{coords.top_right_x, coords.top_right_y}, 
@@ -353,12 +344,9 @@ namespace Bloxel
       }
 
       void addFace(Mesh& mesh, const VoxelFace& face, Position voxelPosition, BlockFace blockFace) {
-        std::cout << "Start adding face" << std::endl;
-
-        std::cout << "Start time of texture fetch" << std::endl;
-        texture_type ttype = getVoxel(voxelPosition);
+        Position relativePosition = { voxelPosition.x - startX, voxelPosition.y - startY, voxelPosition.z - startZ };
+        texture_type ttype = getVoxel(relativePosition);
         TextureArray textures = getTextureArray(ttype, blockFace);
-        std::cout << "End timing of texture fetch" << std::endl;
 
         glm::vec3 voxelPos = glm::vec3(voxelPosition.x, voxelPosition.y, voxelPosition.z);
         for(int i = 0; i < 4; i++) {
@@ -381,7 +369,6 @@ namespace Bloxel
         mesh.indices.push_back(indexCountFace + 3);
         mesh.indices.push_back(indexCountFace);
         mesh.setIndexCount(indexCountFace + 4);
-        std::cout << "End adding face" << std::endl;
       }
 
       int indicesCount() {
@@ -393,7 +380,6 @@ namespace Bloxel
       }
 
       void addToChunkMesh(Mesh &mesh) {
-          std::cout << "Start adding to chunk mesh" << std::endl;
           int endY = startY + CY;
           int endX = startX + CX;
           int endZ = startZ + CZ;
@@ -402,7 +388,6 @@ namespace Bloxel
                   for (int x = startX; x < endX; x++) {
                     Position voxelPosition = {x, y, z};
                     bool toRender = renderable.isRenderable(x, y, z, chunkPosMap);
-                    std::cout << "Checked if renderable" << std::endl;
                     if(toRender) {
                       addFace(mesh, LEFT_FACE, voxelPosition, BlockFace::left);
                       addFace(mesh, RIGHT_FACE, voxelPosition, BlockFace::right);
@@ -411,12 +396,11 @@ namespace Bloxel
                       addFace(mesh, FRONT_FACE, voxelPosition, BlockFace::front);
                       addFace(mesh, BACK_FACE, voxelPosition, BlockFace::back);
                     } else {
-                      //printf("%d %d %d Skipped Render\n", voxelPosition.x, voxelPosition.y, voxelPosition.z);
+                      printf("%d %d %d Skipped Render\n", voxelPosition.x, voxelPosition.y, voxelPosition.z);
                     }
                   }
               }
           }
-          std::cout << "Done adding to chunk mesh" << std::endl;
       }
     };
 
@@ -444,11 +428,12 @@ namespace Bloxel
 
         Position pos = { 0, 0, 0};
         world = v3d(rows, v2d(cols, v1d(breadths, Cube(pos, w, h, sFactor))));
-        for(int i = 0; i < rows; i++) {
-          for(int j = 0; j < cols; j++) {
-            for(int k = 0; k < breadths; k++) {
-              Position pos = {i, j, k};
-              world[i][j][k] = Cube(pos, w, h, sFactor);
+        for(int i = 0; i < rows; i+= 1) {
+          for(int j = 0; j < cols; j+= 1) {
+            for(int k = 0; k < breadths; k+= 1) {
+              Position pos = {i * CX, j * CY, k * CZ};
+              auto elem = Cube(pos, w, h, sFactor);
+              world[i][j][k] = elem;
             }
           }
         }
@@ -469,7 +454,6 @@ namespace Bloxel
       }
 
       texture_type getTextureFromHeight(int h) {
-        //std::cout << "Get Texture From Height" << h << std::endl;
         if(h < 20) {
           return texture_type::stone;
         }
@@ -480,17 +464,10 @@ namespace Bloxel
       }
 
       void columnar_voxel_population(int *height, size_t rows, size_t cols) {
-
-              /*
-              Cube& chunk2 = get(i % SCX, k % SCY, j % SCZ);
-              ttype = chunk2.getVoxel(relativePos);
-              std::cout << "Voxel AFTER " << voxel_y << " " << static_cast<int>(ttype) << std::endl;
-              */
         for(int i = 0; i < rows; i++) {
           for(int j = 0; j < cols; j++) {
             int max_height = *((height+ i * cols) + j);
             for(int k = 0; k < SCY * CY; k++) {
-
               Cube& chunk = get(i / CX, k / CY, j / CZ);
 
               int voxel_x = (int)(i % CX);
@@ -500,7 +477,7 @@ namespace Bloxel
               Position relativePos = { voxel_x, voxel_y, voxel_z};
               Position absolutePos = { i, k, j };
               texture_type ttype = getTextureFromHeight(k);
-              if(k > max_height) {
+              if(k >= max_height) {
                 ttype = texture_type::air;
               }
 
@@ -512,7 +489,6 @@ namespace Bloxel
       }
 
       void generate_world_mesh() {
-        std::cout << "Chunks meshing"<< std::endl;
         worldMesh = Mesh();
         for(int i = 0; i < rows; i++) {
           for(int j = 0; j < cols; j++) {
@@ -523,18 +499,14 @@ namespace Bloxel
           }
         }
 
-        std::cout << "Chunks generated"<< std::endl;
         for(int i = 0; i < rows; i++) {
           for(int j = 0; j < cols; j++) {
             for(int k = 0; k < breadths; k++) {
-              std::cout << "Meshing" << std::endl;
               Cube& cube = get(i, j, k);
               cube.addToChunkMesh(worldMesh);
-              std::cout << "Adding to chunk mesh" << std::endl;
             }
           }
         }
-        std::cout << "Mesh generated"<< std::endl;
         worldMesh.generateCubeVAO();
       }
 
@@ -603,12 +575,10 @@ namespace Bloxel
         noise -> SetFractalGain(0.5f);
         noise -> SetFractalType(noise->FractalType::FractalType_FBm);
 
-        // Generate heightmap
         int xmax = SCX*CX;
         int zmax = SCZ*CZ;
         for(int i = 0; i < xmax; i++) {
           for(int j = 0; j < zmax; j++) {
-            // generate random
             float x = -xmax/2.0f + xmax*i/(float)xmax;
             float z = -zmax/2.0f + zmax*j/(float)zmax;
             float y_noise = noise -> GetNoise((float)x, (float)z);
