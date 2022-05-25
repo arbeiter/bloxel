@@ -16,9 +16,9 @@
 namespace Bloxel 
 {
     #define SCALE_FACTOR 6
-    #define SCX 3 
-    #define SCY 3
-    #define SCZ 3
+    #define SCX 5 
+    #define SCY 5
+    #define SCZ 5
 
     using VoxelFace = std::array<glm::vec3, 4>;
     typedef std::array<glm::vec2, 4> TextureArray;
@@ -58,9 +58,9 @@ namespace Bloxel
       front= 0, back = 1, left = 2, right = 3, top = 4, bottom = 5
     };
 
-    constexpr int CX = 20;
-    constexpr int CY = 3;
-    constexpr int CZ = 20;
+    constexpr int CX = 16;
+    constexpr int CY = 16;
+    constexpr int CZ = 16;
     struct Vertex {
         glm::vec3 position{0.0f};
         glm::vec2 texture{0.0f};
@@ -305,14 +305,12 @@ namespace Bloxel
       float width;
       float height;
       int scaleFactor;
-      std::map<Position, int> chunkPosMap; 
       Renderable renderable;
       TextureAtlas textureAtlas;
 
       public:
       Cube(Position pos, float width, float height, int scaleFactor) :renderable { Renderable(pos) }, textureAtlas { TextureAtlas() }
       {
-        chunkPosMap = {};
         startX = pos.x;
         startY = pos.y;
         startZ = pos.z;
@@ -376,11 +374,7 @@ namespace Bloxel
         return indices;
       }
 
-      void setChunkPosMap(std::map<Position, int> posMap) {
-        chunkPosMap = posMap;
-      }
-
-      void addToChunkMesh(Mesh &mesh) {
+      void addToChunkMesh(Mesh &mesh, std::map<Position, int> &posMap) {
           int endY = startY + CY;
           int endX = startX + CX;
           int endZ = startZ + CZ;
@@ -388,7 +382,7 @@ namespace Bloxel
               for (int z = startZ; z < endZ; z++) {
                   for (int x = startX; x < endX; x++) {
                     Position voxelPosition = {x, y, z};
-                    bool toRender = renderable.isRenderable(x, y, z, chunkPosMap);
+                    bool toRender = renderable.isRenderable(x, y, z, posMap);
                     if(toRender) {
                       addFace(mesh, LEFT_FACE, voxelPosition, BlockFace::left);
                       addFace(mesh, RIGHT_FACE, voxelPosition, BlockFace::right);
@@ -419,7 +413,7 @@ namespace Bloxel
       float h;
       int sFactor;
       Mesh worldMesh;
-      std::map<Position, int> chunkPosMap {};
+      std::map<Position, int> chunkPosMap;
 
       public:
       World(float width, float height, int scaleFactor)  {
@@ -490,21 +484,14 @@ namespace Bloxel
       }
 
       void generate_world_mesh() {
+        std::cout << "493" << std::endl;
         worldMesh = Mesh();
-        for(int i = 0; i < rows; i++) {
-          for(int j = 0; j < cols; j++) {
-            for(int k = 0; k < breadths; k++) {
-              Cube& cube = get(i, j, k);
-              cube.setChunkPosMap(chunkPosMap);
-            }
-          }
-        }
 
         for(int i = 0; i < rows; i++) {
           for(int j = 0; j < cols; j++) {
             for(int k = 0; k < breadths; k++) {
               Cube& cube = get(i, j, k);
-              cube.addToChunkMesh(worldMesh);
+              cube.addToChunkMesh(worldMesh, chunkPosMap);
             }
           }
         }
