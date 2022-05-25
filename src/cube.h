@@ -216,7 +216,8 @@ namespace Bloxel
         startZ = pos.z;
       }
 
-      bool isRenderable(int x, int y, int z, std::map<Position, int> chunkPosMap) {
+      // TODO: Make chunkPosMap const: THis is super unsafe right now
+      bool isRenderable(int x, int y, int z, std::map<Position, int> &chunkPosMap) {
         Position absPosition = {x, y, z};
         if(chunkPosMap[absPosition] == 2) {
           return false;
